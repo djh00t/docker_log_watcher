@@ -1,6 +1,6 @@
-# Bazarr Log Error Handler
+# Docker Log Watcher
 
-This script retrieves Bazarr logs, identifies errors, and attempts to either repair, delete, or remux corrupted files. The script supports both command-line arguments and environment variables, including the use of a `.env` file for storing sensitive data such as API keys for Sonarr and Radarr.
+This script retrieves docker logs, watches for specific patterns which trigger actions. The script supports both command-line arguments and environment variables, including the use of a `.env` file for storing sensitive data such as API keys.
 
 ## Features
 
