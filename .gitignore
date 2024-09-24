@@ -1,2 +1,7 @@
 .aider*
 .env
+.age.pub
+age.agekey
+__pycache__
+*.pyc
+.pytest_cache
