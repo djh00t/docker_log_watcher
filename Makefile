@@ -10,7 +10,7 @@ lint:
 	poetry run flake8 .
 
 test:
-	poetry run pytest
+	PYTHONPATH=$(pwd) poetry run pytest
 
 clean:
 	find . -type f -name '*.pyc' -delete
