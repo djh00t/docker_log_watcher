@@ -23,6 +23,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from radarr_api import handle_radarr_blacklist, handle_radarr_rescan
 from sonarr_api import trigger_sonarr_rescan
+from hello import hello
 
 # Load environment variables from .env file
 load_dotenv()
