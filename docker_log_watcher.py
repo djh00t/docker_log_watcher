@@ -9,7 +9,9 @@ arguments and environment variables, including the use of a `.env` file for
 storing sensitive data such as API keys for Sonarr and Radarr.
 
 Usage:
-    $ python bazarr_error_handler.py --bazarr_container=bazarr --sonarr_host=http://localhost:8989 --sonarr_key=SONARR_API_KEY --radarr_host=http://localhost:7878 --radarr_key=RADARR_API_KEY --debug
+    $ python bazarr_error_handler.py --bazarr_container=bazarr \
+    --sonarr_host=http://localhost:8989 --sonarr_key=SONARR_API_KEY \
+    --radarr_host=http://localhost:7878 --radarr_key=RADARR_API_KEY --debug
 """
 
 import os
@@ -30,11 +32,13 @@ ERROR_RULES = [
     {"error": ".*Timeout.*", "action": [{"always": "IGNORE"}]},
     {"error": ".*+----.*-------+.*", "action": [{"always": "IGNORE"}]},
     {
-        "error": ".*cannot insert movie.*because of (sqlite3.IntegrityError) UNIQUE constraint failed.*",
+        "error": ".*cannot insert movie.*because of (sqlite3.IntegrityError) "
+                 "UNIQUE constraint failed.*",
         "action": [{"always": "IGNORE"}],
     },
     {
-        "error": ".*Error trying to get (series|movies|episodes|tags|episodeFiles|profiles) from (Sonarr|Radarr). Timeout.*",
+        "error": ".*Error trying to get (series|movies|episodes|tags|"
+                 "episodeFiles|profiles) from (Sonarr|Radarr). Timeout.*",
         "action": [{"always": "IGNORE"}],
     },
     {"error": ".*UNIQUE constraint failed:.*", "action": [{"always": "IGNORE"}]},
@@ -51,7 +55,8 @@ ERROR_RULES = [
         "action": ["BLACKLIST", {"REMUX": {"success": "DELETE", "fail": "REPLACE"}}],
     },
     {
-        "error": ".*ffprobe cannot analyze this video file.*Could it be corrupted?.*",
+        "error": ".*ffprobe cannot analyze this video file.*Could it be "
+                 "corrupted?.*",
         "action": [
             {
                 "REPAIR": {
@@ -104,7 +109,8 @@ def mount_iso_and_remux(iso_path, output_path):
     if video_file is None:
         logger.error("No video file found in ISO.")
         try:
-            subprocess.run(["umount", mount_point], check=True, stderr=subprocess.PIPE)
+            subprocess.run(["umount", mount_point], check=True,
+                           stderr=subprocess.PIPE)
         except subprocess.CalledProcessError as e:
             logger.error(
                 f"Failed to unmount ISO: {iso_path}. Error: {e.stderr.decode().strip()}"
@@ -136,7 +142,8 @@ def mount_iso_and_remux(iso_path, output_path):
     except subprocess.CalledProcessError as e:
         logger.error(f"Remux failed. Error: {e}")
     try:
-        subprocess.run(["umount", mount_point], check=True, stderr=subprocess.PIPE)
+        subprocess.run(["umount", mount_point], check=True,
+                       stderr=subprocess.PIPE)
     except subprocess.CalledProcessError as e:
         logger.error(
             f"Failed to unmount ISO: {iso_path}. Error: {e.stderr.decode().strip()}"
@@ -146,7 +153,8 @@ def mount_iso_and_remux(iso_path, output_path):
     # Unmount the ISO
     logger.info(f"Unmounting ISO: {iso_path}")
     try:
-        subprocess.run(["umount", mount_point], check=True, stderr=subprocess.PIPE)
+        subprocess.run(["umount", mount_point], check=True,
+                       stderr=subprocess.PIPE)
     except subprocess.CalledProcessError as e:
         logger.error(
             f"Failed to unmount ISO: {iso_path}. Error: {e.stderr.decode().strip()}"
@@ -195,7 +203,8 @@ def remux_file(file_path, delete_original=False):
     ]
     logger.debug(f"Running command: {' '.join(cmd)}")
     try:
-        subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.run(cmd, check=True, stdout=subprocess.PIPE,
+                       stderr=subprocess.PIPE)
         logger.info(f"Remux successful: {output_file}")
 
         if delete_original:
@@ -215,7 +224,7 @@ def handle_file(file_path, actions, args):
     """
     logger.info(f"Handling file: {file_path}")
     try:
-        file_size = Path(file_path).stat().st_size / (1024 * 1024)  # Get size in MB
+        file_size = Path(file_path).stat().st_size / (1024 * 1024)  # Size in MB
         logger.debug(f"File size: {file_size:.2f} MB")
     except FileNotFoundError:
         if args.super_debug:
@@ -295,7 +304,7 @@ def parse_bazarr_logs(args):
     by file name, and the error cause is extracted for further handling.
     """
     logger.info("Retrieving Bazarr logs...")
-    cmd = f"docker logs {BAZARR_CONTAINER} 2>&1 | grep ':  ERROR'"
+    cmd = f"docker logs {BAZARR_CONTAINER} 2>&1 | grep ': ERROR'"
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
     if result.returncode != 0:
@@ -352,16 +361,20 @@ def main():
         help="Bazarr container name",
     )
     parser.add_argument(
-        "--sonarr_host", type=str, default=os.getenv("SONARR_HOST"), help="Sonarr host"
+        "--sonarr_host", type=str, default=os.getenv("SONARR_HOST"),
+        help="Sonarr host"
     )
     parser.add_argument(
-        "--sonarr_key", type=str, default=os.getenv("SONARR_KEY"), help="Sonarr API key"
+        "--sonarr_key", type=str, default=os.getenv("SONARR_KEY"),
+        help="Sonarr API key"
     )
     parser.add_argument(
-        "--radarr_host", type=str, default=os.getenv("RADARR_HOST"), help="Radarr host"
+        "--radarr_host", type=str, default=os.getenv("RADARR_HOST"),
+        help="Radarr host"
     )
     parser.add_argument(
-        "--radarr_key", type=str, default=os.getenv("RADARR_KEY"), help="Radarr API key"
+        "--radarr_key", type=str, default=os.getenv("RADARR_KEY"),
+        help="Radarr API key"
     )
     parser.add_argument("--debug", action="store_true", help="Enable debug logging")
     parser.add_argument(
