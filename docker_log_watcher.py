@@ -207,17 +207,21 @@ def remux_file(file_path, delete_original=False):
     ]
     logger.debug(f"Running command: {' '.join(cmd)}")
     try:
-        subprocess.run(cmd, check=True, stdout=subprocess.PIPE,
-                       stderr=subprocess.PIPE)
-        logger.info(f"Remux successful: {output_file}")
+        result = subprocess.run(cmd, check=True, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        if result.returncode == 0:
+            logger.info(f"Remux successful: {output_file}")
 
-        if delete_original:
-            logger.info(f"Deleting original file: {file_path}")
-            os.remove(file_path)
+            if delete_original:
+                logger.info(f"Deleting original file: {file_path}")
+                os.remove(file_path)
 
-        return True
+            return True
+        else:
+            logger.error(f"Remux failed for file: {file_path}. Error: {result.stderr}")
+            return False
     except subprocess.CalledProcessError as e:
-        logger.error(f"Remux failed for file: {file_path}. Error: {e}")
+        logger.error(f"Remux failed for file: {file_path}. Error: {e.stderr}")
         return False
 
 

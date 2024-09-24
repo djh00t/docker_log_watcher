@@ -30,6 +30,8 @@ def test_parse_bazarr_logs(mock_run):
     mock_run.return_value = MagicMock(stdout="2023-09-24 17:40:55,123 - ERROR - BAZARR ffprobe cannot analyze this video file. Could it be corrupted? /path/to/video.mkv\n")
     args = MagicMock()
     args.verbose_debug = False
+    global BAZARR_CONTAINER
+    BAZARR_CONTAINER = "bazarr"
     errors = parse_bazarr_logs(args)
     assert '/path/to/video.mkv' in errors
     assert errors['/path/to/video.mkv']['error_cause'] == 'ffprobe cannot analyze this video file. Could it be corrupted?'
