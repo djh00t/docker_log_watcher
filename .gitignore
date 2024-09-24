@@ -5,3 +5,4 @@ age.agekey
 __pycache__
 *.pyc
 .pytest_cache
+.age.pub
