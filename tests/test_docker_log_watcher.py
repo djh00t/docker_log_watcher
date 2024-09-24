@@ -1,7 +1,10 @@
 import pytest
 import subprocess
 from unittest.mock import patch, MagicMock
+import logging
 from docker_log_watcher import remux_file, delete_file, determine_action_for_error, parse_bazarr_logs
+
+logger = logging.getLogger()
 
 @patch('docker_log_watcher.subprocess.run')
 def test_remux_file_success(mock_run):
