@@ -310,17 +310,17 @@ def parse_bazarr_logs(args, BAZARR_CONTAINER):
     by file name, and the error cause is extracted for further handling.
     """
     logger.info("Retrieving Bazarr logs...")
-    cmd = f"docker logs {BAZARR_CONTAINER} 2>&1 | grep ': ERROR'"
+    cmd = f"docker logs {BAZARR_CONTAINER} 2>&1 | grep 'ERROR'"
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
     if result.returncode != 0:
         logger.error("Failed to retrieve logs from Bazarr container.")
         return {}
 
-    logger.info("Bazarr logs retrieved, parsing errors...")
+    logger.info(f"Bazarr logs retrieved, parsing errors... {result.stdout}")
     error_lines = result.stdout.splitlines()
 
-    error_pattern = r".+ERROR \(.+\) - BAZARR (.+) (.+)"
+    error_pattern = r".+ERROR - BAZARR (.+) (.+)"
     deduped_errors = {}
     processed_files = set()
 

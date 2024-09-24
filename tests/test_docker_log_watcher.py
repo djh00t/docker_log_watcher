@@ -28,6 +28,7 @@ def test_determine_action_for_error():
 @patch('docker_log_watcher.subprocess.run')
 def test_parse_bazarr_logs(mock_run):
     mock_run.return_value = MagicMock(returncode=0, stdout="2023-09-24 17:40:55,123 - ERROR - BAZARR ffprobe cannot analyze this video file. Could it be corrupted? /path/to/video.mkv\n")
+    logger.debug("Mocked subprocess.run to return Bazarr log with error")
     args = MagicMock()
     args.verbose_debug = False
     global BAZARR_CONTAINER
