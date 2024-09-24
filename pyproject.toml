@@ -1,14 +1,18 @@
 [tool.poetry]
-name = "your_project_name"
+name = "Docker Log Watcher"
 version = "0.1.0"
-description = "A brief description of your project"
-authors = ["Your Name <you@example.com>"]
+description = "Watch for things in logs, take action when they are seen."
+authors = ["David Hooton <docker_log_watcher+david@hooton.org>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 requests = "^2.28.1"
 python-dotenv = "^1.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+klingon-tools = "^2.1.5"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
