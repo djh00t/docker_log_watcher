@@ -6,8 +6,9 @@ logger = logging.getLogger()
 
 def trigger_sonarr_rescan(file_path, sonarr_host, sonarr_key):
     """
-    Trigger Sonarr to find a new copy of the TV show episode and blacklist the corrupted version.
-    Uses the /api/v3/command endpoint with the command name 'RescanSeries'.
+    Trigger Sonarr to find a new copy of the TV show episode and blacklist the
+    corrupted version. Uses the /api/v3/command endpoint with the command name
+    'RescanSeries'.
     """
     logger.info(f"Triggering Sonarr for file: {file_path}")
     

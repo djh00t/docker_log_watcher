@@ -10,8 +10,8 @@ storing sensitive data such as API keys for Sonarr and Radarr.
 
 Usage:
     $ python bazarr_error_handler.py --bazarr_container=bazarr \
-    --sonarr_host=http://localhost:8989 --sonarr_key=SONARR_API_KEY \
-    --radarr_host=http://localhost:7878 --radarr_key=RADARR_API_KEY --debug
+        --sonarr_host=http://localhost:8989 --sonarr_key=SONARR_API_KEY \
+        --radarr_host=http://localhost:7878 --radarr_key=RADARR_API_KEY --debug
 """
 
 import os
@@ -51,7 +51,8 @@ ERROR_RULES = [
         "action": [{"always": "IGNORE"}],
     },
     {
-        "error": ".*is not a valid video extension.*trying to get video information for this file.*",
+        "error": ".*is not a valid video extension.*trying to get video "
+                 "information for this file.*",
         "action": ["BLACKLIST", {"REMUX": {"success": "DELETE", "fail": "REPLACE"}}],
     },
     {
@@ -113,7 +114,8 @@ def mount_iso_and_remux(iso_path, output_path):
                            stderr=subprocess.PIPE)
         except subprocess.CalledProcessError as e:
             logger.error(
-                f"Failed to unmount ISO: {iso_path}. Error: {e.stderr.decode().strip()}"
+                f"Failed to unmount ISO: {iso_path}. Error: "
+                f"{e.stderr.decode().strip()}"
             )
         return False
 
@@ -146,7 +148,8 @@ def mount_iso_and_remux(iso_path, output_path):
                        stderr=subprocess.PIPE)
     except subprocess.CalledProcessError as e:
         logger.error(
-            f"Failed to unmount ISO: {iso_path}. Error: {e.stderr.decode().strip()}"
+            f"Failed to unmount ISO: {iso_path}. Error: "
+            f"{e.stderr.decode().strip()}"
         )
         return False
 
@@ -157,7 +160,8 @@ def mount_iso_and_remux(iso_path, output_path):
                        stderr=subprocess.PIPE)
     except subprocess.CalledProcessError as e:
         logger.error(
-            f"Failed to unmount ISO: {iso_path}. Error: {e.stderr.decode().strip()}"
+            f"Failed to unmount ISO: {iso_path}. Error: "
+            f"{e.stderr.decode().strip()}"
         )
 
     return True
@@ -240,9 +244,8 @@ def handle_file(file_path, actions, args):
 
     if len(duplicate_files) > 1:
         smallest_file = min(duplicate_files, key=lambda f: f.stat().st_size)
-        logger.info(
-            f"Duplicate files found. Removing the smallest file: {smallest_file}"
-        )
+        logger.info(f"Duplicate files found. Removing the smallest file: "
+                    f"{smallest_file}")
         delete_file(smallest_file)
         return
 
@@ -254,9 +257,8 @@ def handle_file(file_path, actions, args):
             if action_name == "REMUX":
                 remux_success = remux_file(file_path)
                 next_action = result["success"] if remux_success else result["fail"]
-                logger.info(
-                    f"Remux result: {'success' if remux_success else 'fail'}. Next action: {next_action}"
-                )
+                logger.info(f"Remux result: {'success' if remux_success else 'fail'}. "
+                            f"Next action: {next_action}")
                 if next_action == "DELETE":
                     delete_file(file_path)
                 elif next_action == "REPLACE":

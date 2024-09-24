@@ -7,8 +7,8 @@ logger = logging.getLogger()
 
 def get_movie_id_from_radarr(file_path, radarr_host, radarr_key):
     """
-    Get the Radarr movie ID based on the movie folder path.
-    Radarr requires a movie ID to trigger commands such as Rescan or Blacklist.
+    Get the Radarr movie ID based on the movie folder path. Radarr requires a
+    movie ID to trigger commands such as Rescan or Blacklist.
     """
     movie_folder = Path(file_path).parent
     url = f"{radarr_host}/api/v3/movie"
@@ -25,7 +25,8 @@ def get_movie_id_from_radarr(file_path, radarr_host, radarr_key):
         logger.error(f"Movie not found for folder: {movie_folder}")
     else:
         logger.error(
-            f"Failed to retrieve movies from Radarr. Status Code: {response.status_code}, Response: {response.text}"
+            f"Failed to retrieve movies from Radarr. Status Code: "
+            f"{response.status_code}, Response: {response.text}"
         )
 
     return None
@@ -46,7 +47,8 @@ def trigger_radarr_rescan(movie_id, radarr_host, radarr_key):
         return True
     else:
         logger.error(
-            f"Radarr Rescan API call failed for movie ID: {movie_id}. Status Code: {response.status_code}, Response: {response.text}"
+            f"Radarr Rescan API call failed for movie ID: {movie_id}. Status "
+            f"Code: {response.status_code}, Response: {response.text}"
         )
         return False
 
@@ -114,7 +116,8 @@ def blacklist_movie_in_radarr(movie_id, radarr_host, radarr_key, retries=3, dela
                 time.sleep(delay)
             else:
                 logger.error(
-                    f"Failed to blacklist movie ID {movie_id} in Radarr. Status Code: {update_response.status_code}, Response: {update_response.text}"
+                    f"Failed to blacklist movie ID {movie_id} in Radarr. Status Code: "
+                    f"{update_response.status_code}, Response: {update_response.text}"
                 )
                 return False
 
@@ -124,7 +127,8 @@ def blacklist_movie_in_radarr(movie_id, radarr_host, radarr_key, retries=3, dela
         return False
     else:
         logger.error(
-            f"Failed to retrieve movie ID {movie_id} details. Status Code: {response.status_code}, Response: {response.text}"
+            f"Failed to retrieve movie ID {movie_id} details. Status Code: "
+            f"{response.status_code}, Response: {response.text}"
         )
         return False
 
