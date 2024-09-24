@@ -32,6 +32,6 @@ def test_parse_bazarr_logs(mock_run):
     args.verbose_debug = False
     global BAZARR_CONTAINER
     BAZARR_CONTAINER = "bazarr"
-    errors = parse_bazarr_logs(args)
+    errors = parse_bazarr_logs(args, BAZARR_CONTAINER)
     assert '/path/to/video.mkv' in errors
     assert errors['/path/to/video.mkv']['error_cause'] == 'ffprobe cannot analyze this video file. Could it be corrupted?'

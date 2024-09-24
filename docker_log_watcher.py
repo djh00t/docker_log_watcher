@@ -304,7 +304,7 @@ def determine_action_for_error(error_cause):
     return ["UNMATCHED"]
 
 
-def parse_bazarr_logs(args):
+def parse_bazarr_logs(args, BAZARR_CONTAINER):
     """
     Retrieve and parse Bazarr logs for error lines. Each error line is deduplicated
     by file name, and the error cause is extracted for further handling.
@@ -407,7 +407,7 @@ def main():
         level=log_level, format="%(asctime)s - %(levelname)s - %(message)s"
     )
 
-    global BAZARR_CONTAINER, SONARR_HOST, SONARR_KEY, RADARR_HOST, RADARR_KEY
+    global SONARR_HOST, SONARR_KEY, RADARR_HOST, RADARR_KEY
     BAZARR_CONTAINER = args.bazarr_container
     SONARR_HOST = args.sonarr_host
     SONARR_KEY = args.sonarr_key
@@ -419,7 +419,7 @@ def main():
         return
 
     logger.info("Starting Bazarr log analysis...")
-    errors = parse_bazarr_logs(args)
+    errors = parse_bazarr_logs(args, BAZARR_CONTAINER)
 
     for file_path, data in errors.items():
         error_cause = data["error_cause"]
